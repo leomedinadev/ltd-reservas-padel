@@ -237,3 +237,9 @@ US3 → Polish, validando con `quickstart.md` al final de cada fase antes de con
 - Hacer commit tras cada tarea o grupo lógico de tareas
 - Detenerse en cada Checkpoint para validar la historia de forma independiente antes de continuar
 - Evitar: tareas vagas, conflictos de archivo simultáneos, dependencias entre historias que rompan su independencia funcional
+
+---
+
+## Phase 7: Convergence
+
+- [ ] T046 Manejar globalmente una respuesta `401` de cualquier llamada a la API hecha fuera del login (p. ej. en `frontend/src/api/client.ts` o desde `frontend/src/api/authContext.tsx`): al recibir un `401` en una petición autenticada, limpiar el usuario de sesión y redirigir a `/login`, en vez de mostrar solo el mensaje de error inline como hoy en `frontend/src/components/GrillaHoraria.tsx` y `frontend/src/pages/MisReservas.tsx` per Edge Cases (sesión expira durante el flujo de reserva) / FR-003 (partial)
