@@ -8,6 +8,15 @@
 
 **Input**: User description: "Features principales: (1) Autenticación de Usuarios — registro/login por correo y contraseña; solo usuarios con sesión activa ven disponibilidad completa y reservan; cada usuario solo gestiona sus propias reservas. (2) Exploración y Selección de Canchas — listado estático de 5 canchas (Laureles, El Poblado, Belén, Robledo, Envigado); selección de fecha en calendario; grilla de 24 horas en bloques de 1 hora por cancha/fecha mostrando Disponible/Reservado; un usuario solo puede tener una reserva activa a la vez. (3) Creación de Reservas — selección de bloque disponible y confirmación; re-validación de disponibilidad antes de confirmar (prevención de colisión) con mensaje de error claro si el turno ya fue tomado; reservas solo en bloques completos de 1 hora; no se permiten reservas en fechas/horarios pasados. (4) Gestión Mis Reservas — panel con reservas futuras e historial pasado, mostrando cancha/fecha/hora; cancelación de reservas futuras con confirmación. Non-goals: sin pasarela de pagos, sin panel de administrador de canchas, sin notificaciones externas, sin reservas de más de 1 hora en un clic, sin matchmaking."
 
+## Clarifications
+
+### Session 2026-09-15
+
+- Q: ¿Qué puede ver un visitante que NO ha iniciado sesión al entrar a la aplicación? → A: Nada; cualquier ruta redirige de inmediato al formulario de login/registro (no hay vista pública, ni siquiera el listado de canchas).
+- Q: ¿La recuperación de contraseña olvidada ("forgot password") está dentro del alcance de esta iteración? → A: No; se mantiene el non-goal existente "sin notificaciones externas" sin excepciones, por lo que no existe flujo de recuperación de contraseña por correo en esta iteración.
+- Q: ¿Con cuánta antelación máxima hacia el futuro puede un usuario seleccionar una fecha en el calendario para reservar? → A: 7 días (hoy hasta 7 días adelante).
+- Q: ¿Qué requisito mínimo de contraseña debe exigir el sistema al registrarse? → A: Mínimo 8 caracteres, con al menos una letra y un número.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Registro e Inicio de Sesión (Priority: P1)
@@ -75,12 +84,12 @@ Como usuario con sesión activa, quiero ver un panel con mis reservas futuras y 
 
 ### Functional Requirements
 
-- **FR-001**: El sistema MUST permitir que un visitante se registre con un correo electrónico y una contraseña para crear una cuenta de usuario.
+- **FR-001**: El sistema MUST permitir que un visitante se registre con un correo electrónico y una contraseña para crear una cuenta de usuario; la contraseña MUST tener un mínimo de 8 caracteres e incluir al menos una letra y un número, rechazando el registro con un mensaje claro si no cumple este requisito.
 - **FR-002**: El sistema MUST permitir que un usuario registrado inicie sesión con su correo electrónico y contraseña.
-- **FR-003**: El sistema MUST restringir la visualización de la disponibilidad completa y la creación de reservas exclusivamente a usuarios con una sesión activa.
+- **FR-003**: El sistema MUST restringir toda visualización funcional (incluyendo el listado de canchas y la disponibilidad completa) y la creación de reservas exclusivamente a usuarios con una sesión activa; un visitante sin sesión activa que accede a cualquier ruta de la aplicación MUST ser redirigido de inmediato al formulario de inicio de sesión/registro, sin vista pública previa.
 - **FR-004**: El sistema MUST asegurar que un usuario solo pueda ver y gestionar (cancelar) sus propias reservas, nunca las de otros usuarios.
 - **FR-005**: El sistema MUST mostrar un listado estático de exactamente 5 canchas: Cancha Laureles, Cancha El Poblado, Cancha Belén, Cancha Robledo y Cancha Envigado.
-- **FR-006**: El sistema MUST permitir al usuario seleccionar una fecha específica mediante un calendario para consultar la disponibilidad de una cancha.
+- **FR-006**: El sistema MUST permitir al usuario seleccionar una fecha específica, dentro de una ventana que va desde el día actual hasta 7 días hacia adelante (inclusive), mediante un calendario para consultar la disponibilidad de una cancha; el calendario MUST impedir la selección de fechas fuera de esa ventana.
 - **FR-007**: El sistema MUST mostrar, para la cancha y fecha seleccionadas, una grilla de 24 bloques horarios de 1 hora cada uno (formato 24 horas).
 - **FR-008**: El sistema MUST indicar claramente, para cada bloque horario de la grilla, si está "Disponible" o "Reservado".
 - **FR-009**: El sistema MUST impedir que un usuario tenga más de una reserva activa (futura, no cancelada) al mismo tiempo en todo el sistema; el intento de crear una segunda reserva activa MUST ser rechazado con un mensaje claro.
@@ -119,3 +128,4 @@ Como usuario con sesión activa, quiero ver un panel con mis reservas futuras y 
 - No existe un período mínimo de antelación para cancelar una reserva futura; puede cancelarse en cualquier momento antes de su hora de inicio.
 - El pago de la reserva se gestiona presencialmente en el club y está fuera del alcance de esta especificación, según los non-goals declarados.
 - El idioma de la interfaz es español, consistente con la descripción funcional proporcionada.
+- No existe flujo de recuperación de contraseña olvidada ("forgot password") en esta iteración, dado que el alcance explícitamente excluye notificaciones externas (correos transaccionales); un usuario que olvida su contraseña queda fuera de alcance de auto-recuperación.
