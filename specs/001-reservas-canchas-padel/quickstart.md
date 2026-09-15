@@ -45,8 +45,9 @@ cd frontend && npm run dev
 ## Escenario 2 — Ver disponibilidad y reservar (US2, P1)
 
 1. Con sesión activa, seleccionar una de las 5 canchas y una fecha dentro de la
-   ventana de 7 días (hoy a hoy+6) → MUST mostrar una grilla de 24 bloques marcados
-   "Disponible"/"Reservado" (FR-006, FR-007, FR-008).
+   ventana de 7 días (hoy a hoy+6) → MUST mostrar una grilla de 15 bloques (07:00 a
+   22:00) marcados "Disponible"/"Reservado", sin ninguna opción entre las 22:00 y las
+   06:59 (FR-006, FR-007, FR-008).
 2. Intentar seleccionar una fecha fuera de la ventana de 7 días en el calendario →
    MUST estar deshabilitada/no seleccionable.
 3. Seleccionar un bloque "Disponible" y confirmar → MUST crear la reserva; el bloque

@@ -242,4 +242,32 @@ US3 → Polish, validando con `quickstart.md` al final de cada fase antes de con
 
 ## Phase 7: Convergence
 
-- [ ] T046 Manejar globalmente una respuesta `401` de cualquier llamada a la API hecha fuera del login (p. ej. en `frontend/src/api/client.ts` o desde `frontend/src/api/authContext.tsx`): al recibir un `401` en una petición autenticada, limpiar el usuario de sesión y redirigir a `/login`, en vez de mostrar solo el mensaje de error inline como hoy en `frontend/src/components/GrillaHoraria.tsx` y `frontend/src/pages/MisReservas.tsx` per Edge Cases (sesión expira durante el flujo de reserva) / FR-003 (partial)
+- [X] T046 Manejar globalmente una respuesta `401` de cualquier llamada a la API hecha fuera del login (p. ej. en `frontend/src/api/client.ts` o desde `frontend/src/api/authContext.tsx`): al recibir un `401` en una petición autenticada, limpiar el usuario de sesión y redirigir a `/login`, en vez de mostrar solo el mensaje de error inline como hoy en `frontend/src/components/GrillaHoraria.tsx` y `frontend/src/pages/MisReservas.tsx` per Edge Cases (sesión expira durante el flujo de reserva) / FR-003 (partial)
+
+---
+
+## Phase 8: Migración a horario de operación 07:00–22:00 (US2)
+
+**Motivo**: `spec.md` FR-007 cambió (Clarifications 2026-09-15) de una grilla de 24
+bloques (00:00–23:00) a una grilla de 15 bloques (07:00–22:00, horario real de
+operación del club); `data-model.md` y `contracts/api.md` ya reflejan el nuevo rango
+(`hora_inicio` entero `7`–`21`), pero el código todavía implementa el rango viejo.
+
+**Goal**: que la grilla de disponibilidad y la creación de reservas solo operen dentro
+de 07:00–22:00, rechazando cualquier intento fuera de ese rango.
+
+**Independent Test**: `GET /api/disponibilidad?canchaId=1&fecha=<mañana>` MUST
+devolver exactamente 15 bloques con `hora` de `7` a `21`; `POST /api/reservas` con
+`hora: 6` u `hora: 22` MUST responder `400`; la grilla del frontend no debe mostrar
+ninguna opción entre las 22:00 y las 06:59.
+
+- [X] T047 [P] Añadir `CHECK (hora_inicio BETWEEN 7 AND 21)` a la columna `hora_inicio` de la tabla `reservas` en `db/schema.sql` per data-model.md (Reserva.hora_inicio); dado que `CREATE TABLE IF NOT EXISTS` no altera una tabla ya creada, borrar el archivo de desarrollo `db/padel.db` (datos de prueba, sin valor) para que `backend/src/db/connection.ts` la regenere con la nueva restricción en el próximo arranque
+- [X] T048 [P] Actualizar `horaValida()` en `backend/src/lib/fechas.ts`: cambiar el rango válido de `hora >= 0 && hora <= 23` a `hora >= 7 && hora <= 21` per FR-007 (data-model.md: "Entero `7`–`21`")
+- [X] T049 [P] Actualizar `GET /api/disponibilidad` en `backend/src/routes/disponibilidad.ts`: reemplazar `Array.from({ length: 24 }, (_, hora) => ...)` (bloques `hora` 0–23) por un array de 15 bloques `hora` 7–21 inclusive, per contracts/api.md ("Array de 15 elementos (`hora` 7–21)")
+- [X] T050 [P] Actualizar el mensaje de error `400` en `POST /api/reservas` (`backend/src/routes/reservas.ts`) de "Selecciona un bloque horario válido (0 a 23)." a "Selecciona un bloque horario válido (7 a 21)." para que coincida con el nuevo rango validado por `horaValida()` (T048)
+- [X] T051 [P] Corregir el comentario desactualizado "grilla de 24 bloques" en `frontend/src/components/GrillaHoraria.tsx` para reflejar "grilla de 15 bloques (07:00–22:00)" per FR-007; confirmar que el renderizado (`bloques.map(...)`) no tiene ningún conteo de 24 hardcodeado, ya que se adapta dinámicamente al arreglo devuelto por `GET /api/disponibilidad`
+- [X] T052 Ejecutar manualmente el Escenario 2 actualizado de `quickstart.md` (grilla de 15 bloques, 07:00 a 22:00) end-to-end: confirmar que la grilla del frontend muestra exactamente 15 bloques sin ninguna opción entre 22:00 y 06:59, y que tanto `GET /api/disponibilidad` como `POST /api/reservas` rechazan con `400` una `hora` fuera de `7`–`21` (depende de T047–T051)
+
+**Checkpoint**: la grilla y la creación de reservas quedan acotadas a 07:00–22:00 en
+todo el stack (DB, backend, frontend), consistente con `data-model.md` y
+`contracts/api.md`.

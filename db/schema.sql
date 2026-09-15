@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS reservas (
   usuario_id INTEGER NOT NULL REFERENCES usuarios(id),
   cancha_id INTEGER NOT NULL REFERENCES canchas(id),
   fecha TEXT NOT NULL,
-  hora_inicio INTEGER NOT NULL,
+  -- FR-007 (Clarifications 2026-09-15): horario de operación del club 07:00–22:00.
+  hora_inicio INTEGER NOT NULL CHECK (hora_inicio BETWEEN 7 AND 21),
   estado TEXT NOT NULL CHECK (estado IN ('activa', 'cancelada')),
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );

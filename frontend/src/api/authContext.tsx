@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { apiFetch, ApiError } from "./client";
+import { apiFetch, ApiError, setOnSessionExpired } from "./client";
 
 interface Usuario {
   id: number;
@@ -38,6 +38,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelado = true;
     };
+  }, []);
+
+  useEffect(() => {
+    setOnSessionExpired(() => setUsuario(null));
+    return () => setOnSessionExpired(null);
   }, []);
 
   const cerrarSesion = useCallback(async () => {

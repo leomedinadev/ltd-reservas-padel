@@ -1,5 +1,10 @@
 const DIAS_VENTANA_RESERVA = 7; // FR-006 / Clarifications 2026-09-15: hoy .. hoy+7 días inclusive
 
+// FR-007 / Clarifications 2026-09-15: horario de operación del club 07:00–22:00;
+// último bloque reservable empieza a las 21:00 y termina justo a las 22:00.
+export const HORA_APERTURA = 7;
+export const HORA_ULTIMO_BLOQUE = 21;
+
 function hoyISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
@@ -18,9 +23,15 @@ export function fechaEnVentana(fechaISO: string): boolean {
   return fechaISO >= hoy && fechaISO <= limite;
 }
 
-// FR-012: los bloques son siempre horas completas, `hora` entero 0-23.
+// FR-007, FR-012: los bloques son siempre horas completas dentro del horario de
+// operación del club, `hora` entero 7-21.
 export function horaValida(hora: unknown): hora is number {
-  return typeof hora === "number" && Number.isInteger(hora) && hora >= 0 && hora <= 23;
+  return (
+    typeof hora === "number" &&
+    Number.isInteger(hora) &&
+    hora >= HORA_APERTURA &&
+    hora <= HORA_ULTIMO_BLOQUE
+  );
 }
 
 // FR-013: si `fecha` es hoy, `hora` MUST ser mayor a la hora actual (no se permiten

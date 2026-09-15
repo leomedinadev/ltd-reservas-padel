@@ -12,4 +12,4 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
-db/padel.db
+db/padel.db*

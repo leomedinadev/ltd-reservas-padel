@@ -25,7 +25,9 @@ function bloqueYaTranscurrido(fecha: string, hora: number): boolean {
   return hora <= new Date().getHours();
 }
 
-// FR-007, FR-008, FR-010, FR-011, FR-013: grilla de 24 bloques, selección +
+// FR-007, FR-008, FR-010, FR-011, FR-013: grilla de 15 bloques (07:00–22:00,
+// horario de operación del club), renderizada dinámicamente a partir de lo que
+// devuelve la API — no hay ningún conteo fijo aquí. Selección +
 // confirmación de una reserva sobre un bloque disponible y no transcurrido.
 export function GrillaHoraria({ canchaId, fecha }: Props) {
   const [bloques, setBloques] = useState<Bloque[]>([]);

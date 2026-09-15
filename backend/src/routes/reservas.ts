@@ -36,7 +36,7 @@ reservasRouter.post("/", requiereAutenticacion, (req, res) => {
     return;
   }
   if (!horaValida(hora)) {
-    enviarError(res, 400, "Selecciona un bloque horario válido (0 a 23).");
+    enviarError(res, 400, "Selecciona un bloque horario válido (7 a 21).");
     return;
   }
   if (bloqueYaTranscurrido(fecha, hora)) {

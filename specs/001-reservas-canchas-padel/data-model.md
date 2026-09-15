@@ -48,7 +48,7 @@ FR-007 a FR-018).
 | `usuario_id` | `INTEGER NOT NULL REFERENCES usuarios(id)` | Dueño de la reserva |
 | `cancha_id` | `INTEGER NOT NULL REFERENCES canchas(id)` | Cancha reservada |
 | `fecha` | `TEXT NOT NULL` | Formato `YYYY-MM-DD`; en el momento de creación MUST estar dentro de la ventana `[hoy, hoy+7 días]` inclusive (Clarifications 2026-09-15) y no MUST ser una fecha/hora ya transcurrida (FR-013) |
-| `hora_inicio` | `INTEGER NOT NULL` | Entero `0`–`23`; representa el bloque completo de 1 hora `[hora_inicio, hora_inicio+1)` (FR-012) |
+| `hora_inicio` | `INTEGER NOT NULL CHECK (hora_inicio BETWEEN 7 AND 21)` | Entero `7`–`21` (horario de operación del club 07:00–22:00, Clarifications 2026-09-15 / FR-007); representa el bloque completo de 1 hora `[hora_inicio, hora_inicio+1)` (FR-012) |
 | `estado` | `TEXT NOT NULL CHECK (estado IN ('activa','cancelada'))` | `activa` al crear; pasa a `cancelada` solo vía cancelación explícita del dueño sobre una reserva futura (FR-016, FR-017) |
 | `created_at` | `TEXT NOT NULL DEFAULT (datetime('now'))` | ISO 8601 |
 
@@ -105,7 +105,8 @@ condiciones de carrera):
   una letra y un número (FR-001).
 - `fecha` de una nueva reserva: dentro de `[hoy, hoy+7 días]` inclusive; si
   `fecha == hoy`, `hora_inicio` MUST ser mayor a la hora actual (FR-013).
-- `hora_inicio`: entero `0`–`23` (FR-012; los bloques son siempre de 1 hora completa,
-  no se aceptan fracciones).
+- `hora_inicio`: entero `7`–`21` (FR-007: horario de operación del club 07:00–22:00; los
+  bloques entre las 22:00 y las 06:59 MUST NOT aparecer como opción); FR-012: los bloques
+  son siempre de 1 hora completa, no se aceptan fracciones.
 - Antes de cancelar: la reserva MUST pertenecer al usuario autenticado (FR-004) y su
   `fecha`+`hora_inicio` MUST ser futura (FR-017).

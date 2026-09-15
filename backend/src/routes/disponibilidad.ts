@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { requiereAutenticacion } from "../middleware/auth.js";
 import { obtenerBloquesOcupados } from "../db/reservas.js";
-import { fechaEnVentana } from "../lib/fechas.js";
+import { fechaEnVentana, HORA_APERTURA, HORA_ULTIMO_BLOQUE } from "../lib/fechas.js";
 import { enviarError } from "../lib/errors.js";
 
 export const disponibilidadRouter = Router();
@@ -27,10 +27,14 @@ disponibilidadRouter.get("/", requiereAutenticacion, (req, res) => {
 
   const canchaId = Number(canchaIdRaw);
   const ocupados = obtenerBloquesOcupados(canchaId, fecha);
-  const bloques = Array.from({ length: 24 }, (_, hora) => ({
-    hora,
-    estado: ocupados.has(hora) ? ("reservado" as const) : ("disponible" as const),
-  }));
+  const totalBloques = HORA_ULTIMO_BLOQUE - HORA_APERTURA + 1;
+  const bloques = Array.from({ length: totalBloques }, (_, i) => {
+    const hora = HORA_APERTURA + i;
+    return {
+      hora,
+      estado: ocupados.has(hora) ? ("reservado" as const) : ("disponible" as const),
+    };
+  });
 
   res.status(200).json({ canchaId, fecha, bloques });
 });

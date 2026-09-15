@@ -16,6 +16,7 @@
 - Q: ¿La recuperación de contraseña olvidada ("forgot password") está dentro del alcance de esta iteración? → A: No; se mantiene el non-goal existente "sin notificaciones externas" sin excepciones, por lo que no existe flujo de recuperación de contraseña por correo en esta iteración.
 - Q: ¿Con cuánta antelación máxima hacia el futuro puede un usuario seleccionar una fecha en el calendario para reservar? → A: 7 días (hoy hasta 7 días adelante).
 - Q: ¿Qué requisito mínimo de contraseña debe exigir el sistema al registrarse? → A: Mínimo 8 caracteres, con al menos una letra y un número.
+- Q: ¿Cuál es el rango exacto de horas reservables de la grilla? → A: 07:00 a 22:00 (15 bloques reservables: 07:00, 08:00, … 21:00; el último bloque termina justo a las 22:00, hora de cierre del club). Los bloques entre las 22:00 y las 06:59 no aparecen como opción en ninguna cancha/fecha.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -43,11 +44,11 @@ Como usuario con sesión activa, quiero elegir una cancha y una fecha, ver qué 
 
 **Why this priority**: Es el valor central de la aplicación: la razón de ser del sistema es permitir reservar una cancha de forma confiable, sin choques de horario. Sin esta historia no hay producto, solo un sistema de cuentas.
 
-**Independent Test**: Con un usuario ya autenticado, puede probarse seleccionando una de las 5 canchas y una fecha futura, verificando que la grilla de 24 bloques horarios muestra correctamente qué horas están "Disponible" y cuáles "Reservado", y luego confirmando una reserva sobre un bloque disponible, verificando que dicho bloque pasa a mostrarse como "Reservado".
+**Independent Test**: Con un usuario ya autenticado, puede probarse seleccionando una de las 5 canchas y una fecha futura, verificando que la grilla de 15 bloques horarios (07:00 a 22:00) muestra correctamente qué horas están "Disponible" y cuáles "Reservado", y luego confirmando una reserva sobre un bloque disponible, verificando que dicho bloque pasa a mostrarse como "Reservado".
 
 **Acceptance Scenarios**:
 
-1. **Given** un usuario con sesión activa, **When** selecciona una cancha y una fecha, **Then** el sistema muestra una grilla de 24 bloques horarios de 1 hora para esa cancha y fecha, cada uno marcado como "Disponible" o "Reservado".
+1. **Given** un usuario con sesión activa, **When** selecciona una cancha y una fecha, **Then** el sistema muestra una grilla de 15 bloques horarios de 1 hora (07:00 a 22:00) para esa cancha y fecha, cada uno marcado como "Disponible" o "Reservado".
 2. **Given** la grilla de disponibilidad visible, **When** el usuario selecciona un bloque marcado como "Disponible" y confirma, **Then** el sistema re-valida que el bloque sigue libre y, si es así, crea la reserva y el bloque pasa a mostrarse como "Reservado".
 3. **Given** dos usuarios intentando reservar el mismo bloque casi al mismo tiempo, **When** el segundo usuario confirma después de que el primero ya reservó ese bloque, **Then** el sistema rechaza la segunda confirmación con un mensaje de error claro indicando que el horario ya no está disponible, y no crea una reserva duplicada.
 4. **Given** un usuario con sesión activa, **When** intenta seleccionar un bloque horario correspondiente a una fecha u hora ya transcurrida, **Then** el sistema no permite seleccionarlo ni confirmarlo como reserva.
@@ -90,7 +91,7 @@ Como usuario con sesión activa, quiero ver un panel con mis reservas futuras y 
 - **FR-004**: El sistema MUST asegurar que un usuario solo pueda ver y gestionar (cancelar) sus propias reservas, nunca las de otros usuarios.
 - **FR-005**: El sistema MUST mostrar un listado estático de exactamente 5 canchas: Cancha Laureles, Cancha El Poblado, Cancha Belén, Cancha Robledo y Cancha Envigado.
 - **FR-006**: El sistema MUST permitir al usuario seleccionar una fecha específica, dentro de una ventana que va desde el día actual hasta 7 días hacia adelante (inclusive), mediante un calendario para consultar la disponibilidad de una cancha; el calendario MUST impedir la selección de fechas fuera de esa ventana.
-- **FR-007**: El sistema MUST mostrar, para la cancha y fecha seleccionadas, una grilla de 24 bloques horarios de 1 hora cada uno (formato 24 horas).
+- **FR-007**: El sistema MUST mostrar, para la cancha y fecha seleccionadas, una grilla de 15 bloques horarios de 1 hora cada uno, cubriendo exclusivamente el horario de operación del club de 07:00 a 22:00 (formato 24 horas); los bloques entre las 22:00 y las 06:59 MUST NOT aparecer como opción.
 - **FR-008**: El sistema MUST indicar claramente, para cada bloque horario de la grilla, si está "Disponible" o "Reservado".
 - **FR-009**: El sistema MUST impedir que un usuario tenga más de una reserva activa (futura, no cancelada) al mismo tiempo en todo el sistema; el intento de crear una segunda reserva activa MUST ser rechazado con un mensaje claro.
 - **FR-010**: El sistema MUST permitir que un usuario con sesión activa seleccione un bloque horario disponible y confirme la creación de una reserva sobre él.
@@ -124,7 +125,7 @@ Como usuario con sesión activa, quiero ver un panel con mis reservas futuras y 
 
 - No se requiere verificación de correo electrónico durante el registro, dado que el alcance explícitamente excluye notificaciones externas (correos transaccionales).
 - La sesión de usuario utiliza un mecanismo estándar basado en sesión/cookie o token; no se especifica un método particular de autenticación adicional (SSO, 2FA, etc.) porque no fue solicitado.
-- El club opera las 24 horas para efectos de la grilla de reservas; no existen restricciones de horario de apertura/cierre distintas a las 24 bloques horarios ya definidos.
+- El club opera de 07:00 a 22:00 para efectos de la grilla de reservas (ver FR-007); no existen restricciones de horario adicionales (por ejemplo, por día de la semana o temporada) distintas a esta ventana diaria fija.
 - No existe un período mínimo de antelación para cancelar una reserva futura; puede cancelarse en cualquier momento antes de su hora de inicio.
 - El pago de la reserva se gestiona presencialmente en el club y está fuera del alcance de esta especificación, según los non-goals declarados.
 - El idioma de la interfaz es español, consistente con la descripción funcional proporcionada.

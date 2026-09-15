@@ -33,7 +33,7 @@ toda ruta sin sesión activa redirige a login/registro (per Clarifications 2026-
 
 **Constraints**: Catálogo de 5 canchas fijo e inmutable (Principio I); toda escritura de reserva MUST validar disponibilidad de forma atómica en la misma operación de base de datos, sin rutas alternativas (Principio II); todo endpoint de reserva MUST exigir sesión activa y responder `401` si no la hay (Principio III); estructura de carpetas plana `/frontend`, `/backend`, `/db`, sin capas de dominio/aplicación/infraestructura ni patrones Repository/CQRS (Principio IV); errores técnicos MUST traducirse a mensajes amigables en la UI y el backend MUST usar códigos HTTP semánticos (`400`/`401`/`403`/`404`/`409`) (Principio VI)
 
-**Scale/Scope**: 5 canchas, grilla de 24 bloques/día × 7 días de ventana de reserva, 3 entidades de datos (Usuario, Cancha, Reserva), 4 historias de usuario (2×P1, 1×P2, autenticación implícita en P1-1)
+**Scale/Scope**: 5 canchas, grilla de 15 bloques/día (07:00–22:00, horario de operación del club per FR-007) × 7 días de ventana de reserva, 3 entidades de datos (Usuario, Cancha, Reserva), 4 historias de usuario (2×P1, 1×P2, autenticación implícita en P1-1)
 
 ## Constitution Check
 

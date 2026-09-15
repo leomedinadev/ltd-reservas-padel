@@ -101,7 +101,8 @@ listado de canchas — Clarifications 2026-09-15).
 
 ## GET /api/disponibilidad?canchaId={id}&fecha={YYYY-MM-DD}
 
-Grilla de 24 bloques horarios de una cancha/fecha (FR-006, FR-007, FR-008).
+Grilla de 15 bloques horarios (07:00 a 22:00, horario de operación del club) de una
+cancha/fecha (FR-006, FR-007, FR-008).
 
 Auth: requerida.
 
@@ -117,16 +118,17 @@ Auth: requerida.
   "canchaId": 1,
   "fecha": "2026-09-16",
   "bloques": [
-    { "hora": 0, "estado": "disponible" },
-    { "hora": 1, "estado": "disponible" },
+    { "hora": 7, "estado": "disponible" },
+    { "hora": 8, "estado": "disponible" },
     { "hora": 14, "estado": "reservado" }
   ]
 }
 ```
-  Array de 24 elementos (`hora` 0–23), cada uno `"disponible"` o `"reservado"`
-  (FR-008). Un bloque ya transcurrido (fecha=hoy, hora ≤ hora actual) se marca
-  igualmente según su estado real, pero el frontend lo deshabilita para selección
-  (FR-013).
+  Array de 15 elementos (`hora` 7–21, uno por cada bloque de 07:00 a 22:00; los
+  bloques entre las 22:00 y las 06:59 MUST NOT aparecer, FR-007), cada uno
+  `"disponible"` o `"reservado"` (FR-008). Un bloque ya transcurrido (fecha=hoy,
+  hora ≤ hora actual) se marca igualmente según su estado real, pero el frontend lo
+  deshabilita para selección (FR-013).
 - `400 Bad Request` → `canchaId` inválido o `fecha` fuera de la ventana de 7 días
 - `401 Unauthorized`
 
@@ -147,7 +149,8 @@ Auth: requerida.
 - `201 Created` → `{ "id": 42, "canchaId": 1, "fecha": "2026-09-16", "hora": 14,
   "estado": "activa" }`
 - `400 Bad Request` → `fecha`/`hora` fuera de ventana permitida, fecha/hora ya
-  transcurrida (FR-013), o `hora` fuera de `0`–`23`
+  transcurrida (FR-013), o `hora` fuera de `7`–`21` (fuera del horario de operación
+  del club, FR-007)
 - `401 Unauthorized`
 - `409 Conflict`, dos causas posibles (mensaje distingue el caso):
   - `{ "error": "Ese horario ya no está disponible." }` — el bloque fue tomado por
