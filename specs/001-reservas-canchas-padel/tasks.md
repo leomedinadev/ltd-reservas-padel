@@ -33,11 +33,11 @@ repositorio (Constitución Principio IV).
 
 **Purpose**: Inicialización de los proyectos backend y frontend
 
-- [ ] T001 Crear la estructura de carpetas de `plan.md`: `backend/src/{db,routes,middleware,lib}`, `backend/tests`, `frontend/src/{components,pages,api}`, `frontend/tests`, `db/`
-- [ ] T002 [P] Inicializar proyecto backend en `backend/` (`package.json`, `tsconfig.json`) con dependencias `express`, `better-sqlite3`, `bcryptjs`, `jsonwebtoken`, `cookie-parser` y sus `@types/*` (research.md §1, §2)
-- [ ] T003 [P] Inicializar proyecto frontend en `frontend/` con Vite + React 18 + TypeScript, y configurar Tailwind CSS (plan.md Technical Context)
-- [ ] T004 [P] Configurar ESLint + Prettier compartidos para `backend/` y `frontend/` (estilo funcional, camelCase/PascalCase — Constitución Principio V)
-- [ ] T005 [P] Configurar Vitest en `backend/vitest.config.ts` y `frontend/vitest.config.ts`, añadiendo `supertest` (backend) y `@testing-library/react` (frontend) como dependencias de desarrollo (research.md §3), sin escribir pruebas todavía
+- [X] T001 Crear la estructura de carpetas de `plan.md`: `backend/src/{db,routes,middleware,lib}`, `backend/tests`, `frontend/src/{components,pages,api}`, `frontend/tests`, `db/`
+- [X] T002 [P] Inicializar proyecto backend en `backend/` (`package.json`, `tsconfig.json`) con dependencias `express`, `better-sqlite3`, `bcryptjs`, `jsonwebtoken`, `cookie-parser` y sus `@types/*` (research.md §1, §2)
+- [X] T003 [P] Inicializar proyecto frontend en `frontend/` con Vite + React 18 + TypeScript, y configurar Tailwind CSS (plan.md Technical Context)
+- [X] T004 [P] Configurar ESLint + Prettier compartidos para `backend/` y `frontend/` (estilo funcional, camelCase/PascalCase — Constitución Principio V)
+- [X] T005 [P] Configurar Vitest en `backend/vitest.config.ts` y `frontend/vitest.config.ts`, añadiendo `supertest` (backend) y `@testing-library/react` (frontend) como dependencias de desarrollo (research.md §3), sin escribir pruebas todavía
 
 **Checkpoint**: Ambos proyectos instalan y arrancan (`npm run dev`) sin funcionalidad aún.
 
@@ -49,16 +49,16 @@ repositorio (Constitución Principio IV).
 
 **⚠️ CRITICAL**: Ninguna historia de usuario puede comenzar hasta completar esta fase
 
-- [ ] T006 Crear `db/schema.sql` con las tablas `usuarios`, `canchas`, `reservas` según `data-model.md`, incluyendo verbatim: `email TEXT NOT NULL UNIQUE` (normalizado en minúsculas), `estado TEXT NOT NULL CHECK (estado IN ('activa','cancelada'))`, y los dos índices únicos parciales `UNIQUE (cancha_id, fecha, hora_inicio) WHERE estado = 'activa'` y `UNIQUE (usuario_id) WHERE estado = 'activa'` (Constitución Principios II y III)
-- [ ] T007 Crear `backend/src/db/connection.ts`: conexión síncrona `better-sqlite3` a `db/padel.db` (singleton), que aplica `db/schema.sql` si las tablas no existen
-- [ ] T008 Crear `backend/src/db/seedCanchas.ts`: sembrado idempotente de las 5 canchas fijas con `id` 1–5 y `nombre` exactamente "Cancha Laureles", "Cancha El Poblado", "Cancha Belén", "Cancha Robledo", "Cancha Envigado" (data-model.md Cancha, FR-005); sin ningún endpoint de creación/edición/borrado (Constitución Principio I)
-- [ ] T009 [P] Crear `backend/src/lib/token.ts`: firmar y verificar JWT (HS256) para la cookie de sesión `session` (research.md §1)
-- [ ] T010 [P] Crear `backend/src/lib/errors.ts`: helper que construye respuestas `{ "error": "mensaje amigable" }` con el código HTTP semántico correspondiente (`400/401/403/404/409`), sin exponer stack traces (Constitución Principio VI, contracts/api.md)
-- [ ] T011 Crear `backend/src/middleware/auth.ts`: middleware que lee la cookie `session`, verifica el JWT (usa T009), adjunta `usuarioId` al request, y responde `401 { "error": "..." }` (vía T010) si falta o es inválida/expirada (FR-003, Constitución Principio III)
-- [ ] T012 Crear `backend/src/server.ts`: bootstrap de Express con `cookie-parser`, parseo JSON, montaje de routers (a añadir en fases siguientes) y manejador global de errores que usa el formato uniforme de T010
-- [ ] T013 [P] Crear `frontend/src/api/client.ts`: wrapper `fetch` tipado con `credentials: 'include'` (envía la cookie httpOnly), que mapea toda respuesta no-2xx al campo `error` del contrato uniforme (contracts/api.md) para mostrarlo como mensaje amigable
-- [ ] T014 Crear `frontend/src/components/ProtectedRoute.tsx` + contexto/hook de sesión en `frontend/src/api/authContext.tsx`: si no hay sesión activa, redirige de inmediato al formulario de login/registro sin renderizar ninguna vista (FR-003; Clarifications 2026-09-15: "sin vista pública, ni siquiera el listado de canchas")
-- [ ] T015 Crear el esqueleto de rutas en `frontend/src/App.tsx`: `/login`, `/registro` (públicas) y `/disponibilidad`, `/mis-reservas` (envueltas en `ProtectedRoute` de T014)
+- [X] T006 Crear `db/schema.sql` con las tablas `usuarios`, `canchas`, `reservas` según `data-model.md`, incluyendo verbatim: `email TEXT NOT NULL UNIQUE` (normalizado en minúsculas), `estado TEXT NOT NULL CHECK (estado IN ('activa','cancelada'))`, y los dos índices únicos parciales `UNIQUE (cancha_id, fecha, hora_inicio) WHERE estado = 'activa'` y `UNIQUE (usuario_id) WHERE estado = 'activa'` (Constitución Principios II y III)
+- [X] T007 Crear `backend/src/db/connection.ts`: conexión síncrona `better-sqlite3` a `db/padel.db` (singleton), que aplica `db/schema.sql` si las tablas no existen
+- [X] T008 Crear `backend/src/db/seedCanchas.ts`: sembrado idempotente de las 5 canchas fijas con `id` 1–5 y `nombre` exactamente "Cancha Laureles", "Cancha El Poblado", "Cancha Belén", "Cancha Robledo", "Cancha Envigado" (data-model.md Cancha, FR-005); sin ningún endpoint de creación/edición/borrado (Constitución Principio I)
+- [X] T009 [P] Crear `backend/src/lib/token.ts`: firmar y verificar JWT (HS256) para la cookie de sesión `session` (research.md §1)
+- [X] T010 [P] Crear `backend/src/lib/errors.ts`: helper que construye respuestas `{ "error": "mensaje amigable" }` con el código HTTP semántico correspondiente (`400/401/403/404/409`), sin exponer stack traces (Constitución Principio VI, contracts/api.md)
+- [X] T011 Crear `backend/src/middleware/auth.ts`: middleware que lee la cookie `session`, verifica el JWT (usa T009), adjunta `usuarioId` al request, y responde `401 { "error": "..." }` (vía T010) si falta o es inválida/expirada (FR-003, Constitución Principio III). Incluye implementar `GET /api/auth/me` (añadido al contrato durante la implementación — ver contracts/api.md) como único endpoint que usa este middleware en esta fase, para que T014 pueda verificar la sesión tras un F5
+- [X] T012 Crear `backend/src/server.ts`: bootstrap de Express con `cookie-parser`, parseo JSON, montaje de routers (a añadir en fases siguientes) y manejador global de errores que usa el formato uniforme de T010
+- [X] T013 [P] Crear `frontend/src/api/client.ts`: wrapper `fetch` tipado con `credentials: 'include'` (envía la cookie httpOnly), que mapea toda respuesta no-2xx al campo `error` del contrato uniforme (contracts/api.md) para mostrarlo como mensaje amigable
+- [X] T014 Crear `frontend/src/components/ProtectedRoute.tsx` + contexto/hook de sesión en `frontend/src/api/authContext.tsx`: si no hay sesión activa, redirige de inmediato al formulario de login/registro sin renderizar ninguna vista (FR-003; Clarifications 2026-09-15: "sin vista pública, ni siquiera el listado de canchas")
+- [X] T015 Crear el esqueleto de rutas en `frontend/src/App.tsx`: `/login`, `/registro` (públicas) y `/disponibilidad`, `/mis-reservas` (envueltas en `ProtectedRoute` de T014)
 
 **Checkpoint**: Fundación lista — las historias de usuario pueden comenzar.
 
@@ -75,15 +75,15 @@ se habilita con sesión activa (spec.md US1).
 
 ### Implementation for User Story 1
 
-- [ ] T016 [P] [US1] Crear `backend/src/lib/password.ts`: `hashPassword`/`verifyPassword` con `bcryptjs` (costo 10) y `validarPassword(password)` que exige verbatim "mínimo 8 caracteres, al menos una letra y un número" (data-model.md Usuario.password_hash, FR-001); la contraseña en texto plano nunca se persiste ni se loguea
-- [ ] T017 [P] [US1] Crear `backend/src/db/usuarios.ts`: `crearUsuario(email, passwordHash)` y `buscarUsuarioPorEmail(email)` contra la tabla `usuarios` (`email TEXT NOT NULL UNIQUE`, normalizado a minúsculas antes de comparar/insertar — data-model.md)
-- [ ] T018 [US1] Implementar `POST /api/auth/registro` en `backend/src/routes/auth.ts` (usa T016, T017): valida formato de email y la regla de contraseña, normaliza email a minúsculas, responde `201 { id, email }` / `400` si la contraseña no cumple el mínimo / `409 { "error": "Este correo ya está registrado." }` si el email ya existe (contracts/api.md, FR-001 escenario 2)
-- [ ] T019 [US1] Implementar `POST /api/auth/login` en `backend/src/routes/auth.ts` (usa T017, T016, T009): verifica credenciales, firma JWT, responde `200 { id, email }` con `Set-Cookie: session=...; HttpOnly; SameSite=Lax`, o `401 { "error": "Correo o contraseña incorrectos." }` con el mismo mensaje genérico tanto si el correo no existe como si la contraseña es incorrecta (FR-002 escenarios 3-4, contracts/api.md)
-- [ ] T020 [US1] Implementar `POST /api/auth/logout` en `backend/src/routes/auth.ts` (usa middleware T011): limpia la cookie `session`, responde `200 {}`
-- [ ] T021 [US1] Montar el router de auth (`/api/auth/*`) en `backend/src/server.ts` (T012)
-- [ ] T022 [P] [US1] Crear `frontend/src/pages/Registro.tsx`: formulario email/contraseña que llama `POST /api/auth/registro` (vía T013), muestra el mensaje amigable de `400`/`409` bajo el campo correspondiente
-- [ ] T023 [P] [US1] Crear `frontend/src/pages/Login.tsx`: formulario email/contraseña que llama `POST /api/auth/login` (vía T013), muestra el mensaje genérico de `401`, y redirige a `/disponibilidad` en éxito
-- [ ] T024 [US1] Conectar el contexto de sesión (`frontend/src/api/authContext.tsx` de T014) para que se actualice tras login/logout exitoso, de modo que `ProtectedRoute` refleje el estado real de sesión (depende de T014, T023)
+- [X] T016 [P] [US1] Crear `backend/src/lib/password.ts`: `hashPassword`/`verifyPassword` con `bcryptjs` (costo 10) y `validarPassword(password)` que exige verbatim "mínimo 8 caracteres, al menos una letra y un número" (data-model.md Usuario.password_hash, FR-001); la contraseña en texto plano nunca se persiste ni se loguea
+- [X] T017 [P] [US1] Crear `backend/src/db/usuarios.ts`: `crearUsuario(email, passwordHash)` y `buscarUsuarioPorEmail(email)` contra la tabla `usuarios` (`email TEXT NOT NULL UNIQUE`, normalizado a minúsculas antes de comparar/insertar — data-model.md)
+- [X] T018 [US1] Implementar `POST /api/auth/registro` en `backend/src/routes/auth.ts` (usa T016, T017): valida formato de email y la regla de contraseña, normaliza email a minúsculas, responde `201 { id, email }` / `400` si la contraseña no cumple el mínimo / `409 { "error": "Este correo ya está registrado." }` si el email ya existe (contracts/api.md, FR-001 escenario 2)
+- [X] T019 [US1] Implementar `POST /api/auth/login` en `backend/src/routes/auth.ts` (usa T017, T016, T009): verifica credenciales, firma JWT, responde `200 { id, email }` con `Set-Cookie: session=...; HttpOnly; SameSite=Lax`, o `401 { "error": "Correo o contraseña incorrectos." }` con el mismo mensaje genérico tanto si el correo no existe como si la contraseña es incorrecta (FR-002 escenarios 3-4, contracts/api.md)
+- [X] T020 [US1] Implementar `POST /api/auth/logout` en `backend/src/routes/auth.ts` (usa middleware T011): limpia la cookie `session`, responde `200 {}`
+- [X] T021 [US1] Montar el router de auth (`/api/auth/*`) en `backend/src/server.ts` (T012)
+- [X] T022 [P] [US1] Crear `frontend/src/pages/Registro.tsx`: formulario email/contraseña que llama `POST /api/auth/registro` (vía T013), muestra el mensaje amigable de `400`/`409` bajo el campo correspondiente
+- [X] T023 [P] [US1] Crear `frontend/src/pages/Login.tsx`: formulario email/contraseña que llama `POST /api/auth/login` (vía T013), muestra el mensaje genérico de `401`, y redirige a `/disponibilidad` en éxito
+- [X] T024 [US1] Conectar el contexto de sesión (`frontend/src/api/authContext.tsx` de T014) para que se actualice tras login/logout exitoso, de modo que `ProtectedRoute` refleje el estado real de sesión (depende de T014, T023)
 
 **Checkpoint**: User Story 1 funciona de forma independiente y es verificable end-to-end.
 
@@ -101,18 +101,18 @@ correctamente, confirmar una reserva sobre un bloque disponible y verificar que 
 
 ### Implementation for User Story 2
 
-- [ ] T025 [P] [US2] Crear `backend/src/db/canchas.ts`: `listarCanchas()` — `SELECT id, nombre FROM canchas` (catálogo sembrado en T008)
-- [ ] T026 [P] [US2] Crear `backend/src/db/reservas.ts`: `obtenerBloquesOcupados(canchaId, fecha)` y `crearReserva(usuarioId, canchaId, fecha, hora)`; `crearReserva` MUST ejecutarse dentro de una transacción síncrona `db.transaction(...)` de `better-sqlite3` que confía en los índices únicos parciales de T006 para que un `INSERT` colisionante falle con `SQLITE_CONSTRAINT`, distinguiendo dos causas: bloque ya ocupado (`cancha_id, fecha, hora_inicio`) vs. el usuario ya tiene otra reserva `activa` (`usuario_id`) (research.md §4, §5; FR-009, FR-011)
-- [ ] T027 [P] [US2] Crear `backend/src/lib/fechas.ts`: helpers puros `fechaEnVentana(fecha)` (verbatim: dentro de `[hoy, hoy+7 días]` inclusive), `horaValida(hora)` (entero `0`–`23`), y `bloqueYaTranscurrido(fecha, hora)` (si `fecha == hoy`, `hora` MUST ser mayor a la hora actual) — FR-006, FR-012, FR-013
-- [ ] T028 [US2] Implementar `GET /api/canchas` en `backend/src/routes/canchas.ts` (auth requerida vía T011; usa T025): `200 [{ id, nombre }]` / `401`
-- [ ] T029 [US2] Implementar `GET /api/disponibilidad` en `backend/src/routes/disponibilidad.ts` (usa T026, T027): valida `canchaId` (1–5) y `fecha` (T027), construye el array de 24 bloques `{ hora: 0..23, estado: "disponible"|"reservado" }`, responde `200`/`400`/`401` (contracts/api.md)
-- [ ] T030 [US2] Implementar `POST /api/reservas` en `backend/src/routes/reservas.ts` (usa T026, T027): valida `canchaId`/`fecha`/`hora` (`400` si fuera de ventana, ya transcurrido, o `hora` fuera de `0`–`23`), crea la reserva dentro de la transacción de T026, responde `201`/`401`/`409` con el mensaje distinto para cada causa de conflicto (contracts/api.md)
-- [ ] T031 [US2] Montar los routers de `canchas`, `disponibilidad` y `reservas` en `backend/src/server.ts` (depende de T028, T029, T030)
-- [ ] T032 [P] [US2] Crear `frontend/src/components/SelectorFecha.tsx`: fila de 7 fechas seleccionables (hoy…hoy+6), deshabilita cualquier fecha fuera de esa ventana (research.md §6, FR-006)
-- [ ] T033 [P] [US2] Crear `frontend/src/components/CanchaSelector.tsx`: lista las 5 canchas obtenidas de `GET /api/canchas` (vía T013)
-- [ ] T034 [US2] Crear `frontend/src/components/GrillaHoraria.tsx`: renderiza los 24 bloques de `GET /api/disponibilidad`, marca "Disponible"/"Reservado", deshabilita bloques ya transcurridos, permite seleccionar+confirmar un bloque disponible llamando `POST /api/reservas`, y muestra el mensaje amigable de `409` (depende de T032, T033)
-- [ ] T035 [US2] Crear `frontend/src/pages/Disponibilidad.tsx`: compone `CanchaSelector` + `SelectorFecha` + `GrillaHoraria` (depende de T034)
-- [ ] T036 [US2] Registrar la ruta protegida `/disponibilidad` en `frontend/src/App.tsx` apuntando a T035 (depende de T015)
+- [X] T025 [P] [US2] Crear `backend/src/db/canchas.ts`: `listarCanchas()` — `SELECT id, nombre FROM canchas` (catálogo sembrado en T008)
+- [X] T026 [P] [US2] Crear `backend/src/db/reservas.ts`: `obtenerBloquesOcupados(canchaId, fecha)` y `crearReserva(usuarioId, canchaId, fecha, hora)`; `crearReserva` MUST ejecutarse dentro de una transacción síncrona `db.transaction(...)` de `better-sqlite3` que confía en los índices únicos parciales de T006 para que un `INSERT` colisionante falle con `SQLITE_CONSTRAINT`, distinguiendo dos causas: bloque ya ocupado (`cancha_id, fecha, hora_inicio`) vs. el usuario ya tiene otra reserva `activa` (`usuario_id`) (research.md §4, §5; FR-009, FR-011)
+- [X] T027 [P] [US2] Crear `backend/src/lib/fechas.ts`: helpers puros `fechaEnVentana(fecha)` (verbatim: dentro de `[hoy, hoy+7 días]` inclusive), `horaValida(hora)` (entero `0`–`23`), y `bloqueYaTranscurrido(fecha, hora)` (si `fecha == hoy`, `hora` MUST ser mayor a la hora actual) — FR-006, FR-012, FR-013
+- [X] T028 [US2] Implementar `GET /api/canchas` en `backend/src/routes/canchas.ts` (auth requerida vía T011; usa T025): `200 [{ id, nombre }]` / `401`
+- [X] T029 [US2] Implementar `GET /api/disponibilidad` en `backend/src/routes/disponibilidad.ts` (usa T026, T027): valida `canchaId` (1–5) y `fecha` (T027), construye el array de 24 bloques `{ hora: 0..23, estado: "disponible"|"reservado" }`, responde `200`/`400`/`401` (contracts/api.md)
+- [X] T030 [US2] Implementar `POST /api/reservas` en `backend/src/routes/reservas.ts` (usa T026, T027): valida `canchaId`/`fecha`/`hora` (`400` si fuera de ventana, ya transcurrido, o `hora` fuera de `0`–`23`), crea la reserva dentro de la transacción de T026, responde `201`/`401`/`409` con el mensaje distinto para cada causa de conflicto (contracts/api.md)
+- [X] T031 [US2] Montar los routers de `canchas`, `disponibilidad` y `reservas` en `backend/src/server.ts` (depende de T028, T029, T030)
+- [X] T032 [P] [US2] Crear `frontend/src/components/SelectorFecha.tsx`: fila de 7 fechas seleccionables (hoy…hoy+6), deshabilita cualquier fecha fuera de esa ventana (research.md §6, FR-006)
+- [X] T033 [P] [US2] Crear `frontend/src/components/CanchaSelector.tsx`: lista las 5 canchas obtenidas de `GET /api/canchas` (vía T013)
+- [X] T034 [US2] Crear `frontend/src/components/GrillaHoraria.tsx`: renderiza los 24 bloques de `GET /api/disponibilidad`, marca "Disponible"/"Reservado", deshabilita bloques ya transcurridos, permite seleccionar+confirmar un bloque disponible llamando `POST /api/reservas`, y muestra el mensaje amigable de `409` (depende de T032, T033)
+- [X] T035 [US2] Crear `frontend/src/pages/Disponibilidad.tsx`: compone `CanchaSelector` + `SelectorFecha` + `GrillaHoraria` (depende de T034)
+- [X] T036 [US2] Registrar la ruta protegida `/disponibilidad` en `frontend/src/App.tsx` apuntando a T035 (depende de T015)
 
 **Checkpoint**: User Story 1 y 2 funcionan juntas; la prevención de doble-reserva es
 verificable end-to-end (quickstart.md Escenario 2, paso 4).
@@ -131,12 +131,12 @@ cancelar una futura confirmando que desaparece y el bloque vuelve a "Disponible"
 
 ### Implementation for User Story 3
 
-- [ ] T037 [P] [US3] Extender `backend/src/db/reservas.ts` con `listarReservasDeUsuario(usuarioId)` (separa `futuras`/`pasadas` comparando `fecha`+`hora_inicio` contra el momento actual — campo derivado, no almacenado, data-model.md) y `cancelarReserva(usuarioId, reservaId)` mediante `UPDATE reservas SET estado='cancelada' WHERE id=? AND usuario_id=? AND estado='activa'`, distinguiendo "no existe" (404), "no es del usuario" (403) y "ya pasó" (409) (FR-004, FR-017, FR-018)
-- [ ] T038 [US3] Implementar `GET /api/reservas/mias` en `backend/src/routes/reservas.ts` (usa T037): `200 { futuras: [...], pasadas: [...] }` con cada ítem mostrando `cancha`, `fecha`, `hora`, `estado` (FR-014, FR-015) / `401`
-- [ ] T039 [US3] Implementar `DELETE /api/reservas/:id` en `backend/src/routes/reservas.ts` (usa T037): `200 { id, estado: "cancelada" }` / `401` / `403 { "error": "No puedes cancelar una reserva que no es tuya." }` / `404` / `409 { "error": "No puedes cancelar una reserva que ya pasó." }` (contracts/api.md)
-- [ ] T040 [P] [US3] Crear `frontend/src/pages/MisReservas.tsx`: obtiene `GET /api/reservas/mias` (vía T013) y renderiza listas separadas y claramente distinguibles "Futuras" e "Historial", cada ítem con cancha/fecha/hora (FR-014, FR-015)
-- [ ] T041 [US3] Añadir la acción de cancelar en `frontend/src/pages/MisReservas.tsx`: paso de confirmación explícita antes de llamar `DELETE /api/reservas/:id`, actualiza la lista tras éxito (FR-016, FR-018) (depende de T040, T039)
-- [ ] T042 [US3] Registrar la ruta protegida `/mis-reservas` en `frontend/src/App.tsx` (T015) y añadir el enlace de navegación desde `Disponibilidad.tsx` (T035)
+- [X] T037 [P] [US3] Extender `backend/src/db/reservas.ts` con `listarReservasDeUsuario(usuarioId)` (separa `futuras`/`pasadas` comparando `fecha`+`hora_inicio` contra el momento actual — campo derivado, no almacenado, data-model.md) y `cancelarReserva(usuarioId, reservaId)` mediante `UPDATE reservas SET estado='cancelada' WHERE id=? AND usuario_id=? AND estado='activa'`, distinguiendo "no existe" (404), "no es del usuario" (403) y "ya pasó" (409) (FR-004, FR-017, FR-018)
+- [X] T038 [US3] Implementar `GET /api/reservas/mias` en `backend/src/routes/reservas.ts` (usa T037): `200 { futuras: [...], pasadas: [...] }` con cada ítem mostrando `cancha`, `fecha`, `hora`, `estado` (FR-014, FR-015) / `401`
+- [X] T039 [US3] Implementar `DELETE /api/reservas/:id` en `backend/src/routes/reservas.ts` (usa T037): `200 { id, estado: "cancelada" }` / `401` / `403 { "error": "No puedes cancelar una reserva que no es tuya." }` / `404` / `409 { "error": "No puedes cancelar una reserva que ya pasó." }` (contracts/api.md)
+- [X] T040 [P] [US3] Crear `frontend/src/pages/MisReservas.tsx`: obtiene `GET /api/reservas/mias` (vía T013) y renderiza listas separadas y claramente distinguibles "Futuras" e "Historial", cada ítem con cancha/fecha/hora (FR-014, FR-015)
+- [X] T041 [US3] Añadir la acción de cancelar en `frontend/src/pages/MisReservas.tsx`: paso de confirmación explícita antes de llamar `DELETE /api/reservas/:id`, actualiza la lista tras éxito (FR-016, FR-018) (depende de T040, T039)
+- [X] T042 [US3] Registrar la ruta protegida `/mis-reservas` en `frontend/src/App.tsx` (T015) y añadir el enlace de navegación desde `Disponibilidad.tsx` (T035)
 
 **Checkpoint**: Las 3 historias de usuario funcionan de forma independiente y en
 conjunto.
@@ -147,9 +147,9 @@ conjunto.
 
 **Purpose**: Mejoras que afectan a varias historias de usuario
 
-- [ ] T043 [P] Crear `frontend/src/components/ErrorNotice.tsx`: componente/mapeo único que traduce cualquier `error` de la API (T013) a un mensaje amigable consistente en toda la UI, sin exponer nunca detalles técnicos (Constitución Principio VI)
-- [ ] T044 [P] Añadir scripts `dev`/`build`/`start` en `backend/package.json` y `frontend/package.json`, y un `README.md` en la raíz con los pasos de `quickstart.md`
-- [ ] T045 Ejecutar manualmente los 3 escenarios de `quickstart.md` (incluida la prueba de colisión de doble-reserva) end-to-end y corregir cualquier hallazgo
+- [X] T043 [P] Crear `frontend/src/components/ErrorNotice.tsx`: componente/mapeo único que traduce cualquier `error` de la API (T013) a un mensaje amigable consistente en toda la UI, sin exponer nunca detalles técnicos (Constitución Principio VI)
+- [X] T044 [P] Añadir scripts `dev`/`build`/`start` en `backend/package.json` y `frontend/package.json`, y un `README.md` en la raíz con los pasos de `quickstart.md`
+- [X] T045 Ejecutar manualmente los 3 escenarios de `quickstart.md` (incluida la prueba de colisión de doble-reserva) end-to-end y corregir cualquier hallazgo
 
 ---
 

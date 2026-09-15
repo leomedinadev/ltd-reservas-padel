@@ -52,10 +52,13 @@ FR-007 a FR-018).
 | `estado` | `TEXT NOT NULL CHECK (estado IN ('activa','cancelada'))` | `activa` al crear; pasa a `cancelada` solo vía cancelación explícita del dueño sobre una reserva futura (FR-016, FR-017) |
 | `created_at` | `TEXT NOT NULL DEFAULT (datetime('now'))` | ISO 8601 |
 
-**Campo derivado (no almacenado)**: *futura* vs *pasada* se calcula comparando
-`fecha` + `hora_inicio` contra la fecha/hora actual en el momento de la consulta; no es
-una columna, para evitar un job de background que la mantenga sincronizada
-(simplicidad, Principio IV).
+**Campo derivado (no almacenado)**: *futura* significa `estado = 'activa'` **y**
+`fecha`+`hora_inicio` aún no transcurridos respecto al momento de la consulta;
+cualquier otra combinación (cancelada, o con fecha/hora ya pasada) se clasifica como
+*pasada* (historial). Esto no es una columna —se recalcula en cada consulta— para
+evitar un job de background que la mantenga sincronizada (simplicidad, Principio IV),
+y hace que al cancelar una reserva futura esta "deje de aparecer como reserva futura
+activa" tal como exige FR-016 (escenario 2), pasando de inmediato al historial.
 
 **Índices / restricciones de integridad crítica**:
 

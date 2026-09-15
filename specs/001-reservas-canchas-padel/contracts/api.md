@@ -60,6 +60,23 @@ Auth: requerida.
 
 ---
 
+## GET /api/auth/me
+
+Añadido durante la implementación: el frontend es una SPA que se recarga (F5) sin
+perder la cookie httpOnly, pero sí pierde cualquier estado de React en memoria; este
+endpoint es la única forma de que `ProtectedRoute` sepa, al montar, si la cookie sigue
+siendo válida sin duplicar lógica de verificación de JWT en el cliente. No introduce
+ninguna funcionalidad de negocio nueva — reutiliza exactamente la misma verificación
+de sesión que ya usan todos los demás endpoints protegidos (FR-003).
+
+Auth: requerida.
+
+**Responses**:
+- `200 OK` → `{ "id": 1, "email": "persona@example.com" }`
+- `401 Unauthorized`
+
+---
+
 ## GET /api/canchas
 
 Lista las 5 canchas fijas (FR-005).
