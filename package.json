@@ -1,0 +1,13 @@
+{
+  "name": "ltd-reservas-padel",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sistema de reservas de canchas de pádel",
+  "scripts": {
+    "format": "prettier --write \"backend/src/**/*.ts\" \"frontend/src/**/*.{ts,tsx}\"",
+    "format:check": "prettier --check \"backend/src/**/*.ts\" \"frontend/src/**/*.{ts,tsx}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}
