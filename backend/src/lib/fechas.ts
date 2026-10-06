@@ -5,19 +5,35 @@ const DIAS_VENTANA_RESERVA = 7; // FR-006 / Clarifications 2026-09-15: hoy .. ho
 export const HORA_APERTURA = 7;
 export const HORA_ULTIMO_BLOQUE = 21;
 
+// Todas las fechas se calculan en la hora local del servidor (la del club, ver TZ en
+// el README). `toISOString()` devuelve la fecha en UTC, que en América ya es "mañana"
+// a partir de las 19:00–20:00 y desfasaba la ventana de reserva.
+function fechaLocalISO(fecha: Date): string {
+  const anio = fecha.getFullYear();
+  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+  const dia = String(fecha.getDate()).padStart(2, "0");
+  return `${anio}-${mes}-${dia}`;
+}
+
 function hoyISO(): string {
-  return new Date().toISOString().slice(0, 10);
+  return fechaLocalISO(new Date());
 }
 
 function sumarDias(fechaISO: string, dias: number): string {
   const fecha = new Date(`${fechaISO}T00:00:00`);
   fecha.setDate(fecha.getDate() + dias);
-  return fecha.toISOString().slice(0, 10);
+  return fechaLocalISO(fecha);
+}
+
+// Descarta fechas con formato correcto pero inexistentes (p. ej. 2026-02-31).
+function fechaExiste(fechaISO: string): boolean {
+  const fecha = new Date(`${fechaISO}T00:00:00`);
+  return !Number.isNaN(fecha.getTime()) && fechaLocalISO(fecha) === fechaISO;
 }
 
 // FR-006: la fecha MUST estar dentro de [hoy, hoy+7 días] inclusive.
 export function fechaEnVentana(fechaISO: string): boolean {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(fechaISO)) return false;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(fechaISO) || !fechaExiste(fechaISO)) return false;
   const hoy = hoyISO();
   const limite = sumarDias(hoy, DIAS_VENTANA_RESERVA);
   return fechaISO >= hoy && fechaISO <= limite;

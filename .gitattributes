@@ -1,0 +1,4 @@
+# GitHub clasificaba el repo como "Shell" por los scripts de Spec Kit
+.specify/** linguist-vendored
+.claude/** linguist-vendored
+specs/** linguist-documentation

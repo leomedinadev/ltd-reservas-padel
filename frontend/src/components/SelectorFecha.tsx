@@ -1,9 +1,11 @@
+import { fechaLocalISO } from "../lib/fechas";
+
 const DIAS_VENTANA = 7; // FR-006 / Clarifications 2026-09-15: hoy .. hoy+6 (7 días)
 
 function fechaISO(offsetDias: number): string {
   const d = new Date();
   d.setDate(d.getDate() + offsetDias);
-  return d.toISOString().slice(0, 10);
+  return fechaLocalISO(d);
 }
 
 const ETIQUETA_DIA = new Intl.DateTimeFormat("es-CO", { weekday: "short", day: "numeric" });

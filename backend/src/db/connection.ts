@@ -5,7 +5,8 @@ import path from "node:path";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, "../../../");
-const dbPath = path.join(repoRoot, "db", "padel.db");
+// DB_PATH permite usar otra base (p. ej. ":memory:" en los tests).
+const dbPath = process.env.DB_PATH ?? path.join(repoRoot, "db", "padel.db");
 const schemaPath = path.join(repoRoot, "db", "schema.sql");
 
 export const db = new Database(dbPath);
