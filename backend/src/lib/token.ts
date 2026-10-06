@@ -1,7 +1,12 @@
 import jwt from "jsonwebtoken";
 
 // research.md §1: JWT firmado (HS256) en cookie httpOnly, verificación stateless.
-const JWT_SECRET = process.env.JWT_SECRET ?? "dev-secret-cambiar-en-produccion";
+// El valor por defecto solo sirve para desarrollo: en producción el servidor no
+// arranca sin JWT_SECRET, para no firmar sesiones con un secreto público.
+if (process.env.NODE_ENV === "production" && !process.env.JWT_SECRET) {
+  throw new Error("Falta la variable de entorno JWT_SECRET (obligatoria en producción).");
+}
+const JWT_SECRET = process.env.JWT_SECRET ?? "dev-secret-solo-para-desarrollo";
 const JWT_EXPIRES_IN = "7d";
 
 export interface SesionPayload {

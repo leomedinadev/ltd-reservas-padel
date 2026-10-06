@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiFetch, ApiError } from "../api/client";
 import { ErrorNotice } from "./ErrorNotice";
+import { bloqueYaTranscurrido } from "../lib/fechas";
 
 interface Bloque {
   hora: number;
@@ -16,13 +17,6 @@ interface Disponibilidad {
 interface Props {
   canchaId: number;
   fecha: string;
-}
-
-function bloqueYaTranscurrido(fecha: string, hora: number): boolean {
-  const hoy = new Date().toISOString().slice(0, 10);
-  if (fecha < hoy) return true;
-  if (fecha > hoy) return false;
-  return hora <= new Date().getHours();
 }
 
 // FR-007, FR-008, FR-010, FR-011, FR-013: grilla de 15 bloques (07:00–22:00,

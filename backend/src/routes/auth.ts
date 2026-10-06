@@ -9,10 +9,15 @@ export const authRouter = Router();
 
 const EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const COOKIE_OPCIONES = {
+// Atributos que identifican la cookie; clearCookie los necesita iguales, pero sin maxAge.
+const COOKIE_BASE = {
   httpOnly: true,
   sameSite: "lax" as const,
   secure: process.env.NODE_ENV === "production",
+};
+
+const COOKIE_OPCIONES = {
+  ...COOKIE_BASE,
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
@@ -72,7 +77,7 @@ authRouter.post("/login", async (req, res) => {
 
 // POST /api/auth/logout — contracts/api.md
 authRouter.post("/logout", requiereAutenticacion, (_req, res) => {
-  res.clearCookie("session", COOKIE_OPCIONES);
+  res.clearCookie("session", COOKIE_BASE);
   res.status(200).json({});
 });
 
